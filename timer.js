@@ -1,39 +1,36 @@
-//create html file and connect with js - done
-//create a button 'start' // eventListener - done
-//create a function which count a numbers- done
-//connect func with button in DOM - done
+const startButtonElement = document.getElementById('start-button').addEventListener('click', handleStartButton)
+const stopButtonElement = document.getElementById('stop-button').addEventListener('click', handleStopButton)
+const pauseButtonElement = document.getElementById('pause-button').addEventListener('click', handlePauseButton)
+const numberElement = document.getElementById('number');
+const listsElement = document.querySelector('lists');
 
- let startButton = document.getElementById('start-button').addEventListener('click', start)
- let stopButton = document.getElementById('stop-button').addEventListener('click', stop)
- let pauseButton = document.getElementById('pause-button').addEventListener('click', pause)
- let countNumber = document.getElementById('number');
- let allLists = document.querySelector('lists');
+let seconds = 1;
+let intervalID;
 
- var numbers = 0;
- var counted;
+numberElement.innerText = seconds;
 
-function seconds() {
-    numbers++;
-    countNumber.innerText = numbers;
+function handleSecondsInterval() {
+    seconds++;
+    numberElement.innerText = seconds;
 }
 
-function start() {
-    counted = setInterval(seconds, 1500);
+function handleStartButton() { 
+    clearInterval(intervalID);
+    intervalID = setInterval(handleSecondsInterval, 1000);
 }
 
-function stop() {
-    countNumber.innerText = "0";
-    clearInterval(counted);
-    numbers = 0;
+function handleStopButton() {
+    seconds = 1;
+    numberElement.innerText = seconds;
+    clearInterval(intervalID);
 }
 
-function pause() {
-    clearInterval(counted);
-    countNumber.innerText = numbers;
-    
-
+function handlePauseButton() {
+    clearInterval(intervalID);
+    numberElement.innerText = seconds;
 }
 
+// TODO: will be used for list
 // function timeToList() {
 //     let firstNumber = document.createElement('li');
 
