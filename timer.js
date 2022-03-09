@@ -1,20 +1,19 @@
 const startButtonElement = document.getElementById('start-button').addEventListener('click', handleStartButton)
 const stopButtonElement = document.getElementById('stop-button').addEventListener('click', handleStopButton)
 const pauseButtonElement = document.getElementById('pause-button').addEventListener('click', handlePauseButton)
-const saveButtonElement = document.getElementById('save-button').addEventListener('click', takeTimeForList)
-const ulElement = document.getElementById("ulElement").getElementsByTagName('li')
+const saveButtonElement = document.getElementById('save-button').addEventListener('click', handleSaveButton) 
+const ulElement = document.getElementById("ulElement")
 const time = document.getElementById('time');
 const listsElement = document.querySelector('lists');
 
-let number = 7777;
+let seconds = 1;
 let intervalID;
 
-time.innerText = formatSecondsToHHMMSS();
-
+time.innerText = formatHours(seconds);
 
 function handleSecondsInterval() {
-    number++;
-    time.innerText = formatSecondsToHHMMSS(number);
+    seconds++;
+    time.innerText = formatHours(seconds);
 }
 
 function handleStartButton() { 
@@ -23,54 +22,26 @@ function handleStartButton() {
 }
 
 function handleStopButton() {
-    number = 1;
-    time.innerText = formatSecondsToHHMMSS(number);
+    seconds = 1;
+    time.innerText = formatHours(seconds);
     clearInterval(intervalID);
 }
 
 function handlePauseButton() {
     clearInterval(intervalID);
-    time.innerText = formatSecondsToHHMMSS(number);
+    time.innerText = formatHours(seconds);
 }
 
-function formatSecondsToHHMMSS(time) {
-    d = Number(number);
-    var h = Math.floor(d / 3600);
-    var m = Math.floor(d % 3600 / 60);
-    var s = Math.floor(d % 3600 % 60);
+function formatHours(totalSeconds) { 
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = Math.floor((totalSeconds % 3600) % 60);
 
-    if (h < 10) {h = "0"+h;}
-    if (m < 10) {m = "0"+m;}
-    if (s < 10) {s = "0"+s;}
-
-    return h+':'+m+':'+s;
+    return String(hours).padStart(2, '0') + ':' + String(minutes).padStart(2, '0') + ':' + String(totalSeconds).padStart(2, '0');
 }
 
-function takeTimeForList() {
-    let firstElementOfUL = ulElement[0];
-    firstElementOfUL.innerHTML = formatSecondsToHHMMSS(number);
+function handleSaveButton() {
+    const listElement  = document.createElement('li'); 
+    listElement.appendChild(document.createTextNode(formatHours(seconds))); 
+    ulElement.appendChild(listElement);
 }
-    
-
-
-
-
-
-
-
-    
-
-
-
-
-// TODO: will be used for list
-// function timeToList() {
-//     let firstNumber = document.createElement('li');
-
-//     if (document.getElementById('stop-button').clicked == true) {
-//         firstNumber.innerText = numbers;
-//     }
-// }
-
-
-
