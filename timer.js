@@ -1,13 +1,16 @@
 const startButtonElement = document.getElementById('start-button').addEventListener('click', handleStartButton)
 const stopButtonElement = document.getElementById('stop-button').addEventListener('click', handleStopButton)
 const pauseButtonElement = document.getElementById('pause-button').addEventListener('click', handlePauseButton)
+const saveButtonElement = document.getElementById('save-button').addEventListener('click', takeTimeForList)
+const ulElement = document.getElementById("ulElement").getElementsByTagName('li')
 const time = document.getElementById('time');
 const listsElement = document.querySelector('lists');
 
-let number = 3600;
+let number = 7777;
 let intervalID;
 
 time.innerText = formatSecondsToHHMMSS();
+
 
 function handleSecondsInterval() {
     number++;
@@ -42,6 +45,13 @@ function formatSecondsToHHMMSS(time) {
 
     return h+':'+m+':'+s;
 }
+
+function takeTimeForList() {
+    let firstElementOfUL = ulElement[0];
+    firstElementOfUL.innerHTML = formatSecondsToHHMMSS(number);
+}
+    
+
 
 
 
