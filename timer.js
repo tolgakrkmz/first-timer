@@ -4,7 +4,7 @@ const pauseButtonElement = document.getElementById('pause-button').addEventListe
 const saveButtonElement = document.getElementById('save-button').addEventListener('click', handleSaveButton) 
 const ulElement = document.getElementById("ulElement")
 const time = document.getElementById('time');
-const listsElement = document.querySelector('lists');
+const inputElement = document.getElementById('getTittle');
 
 let seconds = 1;
 let intervalID;
@@ -41,7 +41,12 @@ function formatHours(totalSeconds) {
 }
 
 function handleSaveButton() {
-    const listElement  = document.createElement('li'); 
-    listElement.appendChild(document.createTextNode(formatHours(seconds))); 
+    const catchTextFromInput = inputElement.value;
+    const listElement  = document.createElement('li');
+    listElement.appendChild(document.createTextNode(formatHours(seconds)));
+    listElement.prepend(document.createTextNode(catchTextFromInput));
     ulElement.appendChild(listElement);
+    inputElement.value = '';
+
+
 }
