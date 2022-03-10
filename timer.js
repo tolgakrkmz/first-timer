@@ -41,12 +41,16 @@ function formatHours(totalSeconds) {
 }
 
 function handleSaveButton() {
-    const catchTextFromInput = inputElement.value;
-    const listElement  = document.createElement('li');
-    listElement.appendChild(document.createTextNode(formatHours(seconds)));
-    listElement.prepend(document.createTextNode(catchTextFromInput));
+    let currentTime = formatHours(seconds);
+    let inputText = inputElement.value;
+    let sumOfTextAndTime = currentTime + inputText;
+    let listElement = document.createElement('li');
+
+    listElement.appendChild(document.createTextNode(sumOfTextAndTime));
+
+    if (inputText) {
+        listElement.innerText = `${inputText} - ${currentTime}`;
+    }
+
     ulElement.appendChild(listElement);
-    inputElement.value = '';
-
-
 }
