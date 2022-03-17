@@ -42,39 +42,45 @@ function formatHours(totalSeconds) {
         + String(seconds).padStart(2, '0');
 }
 
+let listState = [];
+
 function handleSaveButton() {
+    // Apply to State.
+    let listItem = {
+        title: titleInputElement.value,
+        time: formatHours(seconds),
+    };
+
+    listState.push(listItem);
+
     // STEP 1: Create list item.
     const listItemElement = document.createElement('li');
 
     // STEP 2: Create list item title.
-    let titleText = titleInputElement.value;
-    let titleSpanElement = document.createElement('span');
+    const titleSpanElement = document.createElement('span');
     let separatorSpanElement = document.createElement('span');
 
-    titleSpanElement.appendChild(document.createTextNode(titleText));
+    titleSpanElement.appendChild(document.createTextNode(listItem.title));
     listItemElement.appendChild(titleSpanElement);
     listItemElement.appendChild(separatorSpanElement);
 
-    // STEP 3: Create list item time.
-    const currentTime = formatHours(seconds);
-    let listItemText = currentTime;
-
-    if (titleText.length > 0) {
-        listItemText = ` - ${currentTime}`
+    if (listItem.title.length > 0) {
+        separatorSpanElement.innerText = ' - ';
         titleInputElement.value = '';
     }
 
-    listItemElement.appendChild(document.createTextNode(listItemText));
+    // STEP 3: Create list item time.
+    listItemElement.appendChild(document.createTextNode(listItem.time))
 
     // STEP 4: Create 'Input' field for title.
     const textInputBox = document.createElement('input');
     textInputBox.setAttribute('type', 'text');
 
-    // STEP 5: Create 'Edit' button.  
+    // STEP 5: Create 'Edit' button.
     const titleEditButton = document.createElement('button');
     titleEditButton.innerText = 'Edit';
     titleEditButton.addEventListener('click', function () {
-        textInputBox.value = titleSpanElement.innerText;
+        textInputBox.value = listItem.title;
         titleSpanElement.replaceWith(textInputBox);
 
         if (textInputBox.value.length === 0) {
@@ -86,12 +92,19 @@ function handleSaveButton() {
 
     listItemElement.appendChild(titleEditButton);
 
+    let idx = listState.indexOf(listItem);
+
     // STEP 6: Create 'Save' button.
     const titleSaveButton = document.createElement('button');
     titleSaveButton.innerText = 'Save';
     titleSaveButton.addEventListener('click', function () {
         titleSpanElement.innerText = textInputBox.value;
+        console.log(titleSpanElement.innerText);
         textInputBox.replaceWith(titleSpanElement);
+
+        if (idx !== -1) {
+            listItem.title = titleSpanElement.innerText;
+        }
 
         if (textInputBox.value.length === 0) {
             separatorSpanElement.innerText = '';
@@ -104,6 +117,10 @@ function handleSaveButton() {
     const removeButton = document.createElement('button');
     removeButton.innerText = 'Remove';
     removeButton.addEventListener('click', function () {
+
+        if (idx > -1) {
+            listState.splice(idx, 1);
+        }
         listItemElement.remove();
     });
 
