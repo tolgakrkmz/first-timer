@@ -58,7 +58,7 @@ function handleSaveButton() {
 
     // STEP 2: Create list item title.
     const titleSpanElement = document.createElement('span');
-    let separatorSpanElement = document.createElement('span');
+    const separatorSpanElement = document.createElement('span');
 
     titleSpanElement.appendChild(document.createTextNode(listItem.title));
     listItemElement.appendChild(titleSpanElement);
@@ -92,21 +92,15 @@ function handleSaveButton() {
 
     listItemElement.appendChild(titleEditButton);
 
-    let idx = listState.indexOf(listItem);
-
     // STEP 6: Create 'Save' button.
     const titleSaveButton = document.createElement('button');
     titleSaveButton.innerText = 'Save';
     titleSaveButton.addEventListener('click', function () {
-        titleSpanElement.innerText = textInputBox.value;
-        console.log(titleSpanElement.innerText);
+        listItem.title = textInputBox.value;
+        titleSpanElement.innerText = listItem.title;
         textInputBox.replaceWith(titleSpanElement);
 
-        if (idx !== -1) {
-            listItem.title = titleSpanElement.innerText;
-        }
-
-        if (textInputBox.value.length === 0) {
+        if (listItem.title === 0) {
             separatorSpanElement.innerText = '';
         }
 
@@ -117,10 +111,12 @@ function handleSaveButton() {
     const removeButton = document.createElement('button');
     removeButton.innerText = 'Remove';
     removeButton.addEventListener('click', function () {
+        const idx = listState.indexOf(listItem);
 
         if (idx > -1) {
             listState.splice(idx, 1);
         }
+
         listItemElement.remove();
     });
 
