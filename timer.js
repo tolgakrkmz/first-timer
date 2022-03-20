@@ -5,6 +5,7 @@ const saveButtonElement = document.getElementById('save-button').addEventListene
 const listElement = document.getElementById('list');
 const timeElement = document.getElementById('time');
 const titleInputElement = document.getElementById('title-input');
+const descriptionField = document.getElementById('textArea-input');
 
 let seconds = 1;
 let intervalID;
@@ -48,7 +49,9 @@ function handleSaveButton() {
     // Apply to State.
     let listItem = {
         title: titleInputElement.value,
-        time: formatHours(seconds),
+        time: seconds,
+        description: descriptionField.value,
+        isDetailsShown: false,
     };
 
     listState.push(listItem);
@@ -69,8 +72,10 @@ function handleSaveButton() {
         titleInputElement.value = '';
     }
 
+    descriptionField.value = '';
+
     // STEP 3: Create list item time.
-    listItemElement.appendChild(document.createTextNode(listItem.time))
+    listItemElement.appendChild(document.createTextNode(formatHours(seconds)))
 
     // STEP 4: Create 'Input' field for title.
     const textInputBox = document.createElement('input');
@@ -92,7 +97,7 @@ function handleSaveButton() {
 
     listItemElement.appendChild(titleEditButton);
 
-    // STEP 6: Create 'Save' button.
+    // STEP 6: Create 'Save' button in Edit state.
     const titleSaveButton = document.createElement('button');
     titleSaveButton.innerText = 'Save';
     titleSaveButton.addEventListener('click', function () {
@@ -107,7 +112,41 @@ function handleSaveButton() {
         titleSaveButton.replaceWith(titleEditButton);
     });
 
-    // STEP 7: Create 'Remove' button.
+    // STEP 7: Create a 'Details' button.
+    const detailsButton = document.createElement('button');
+    detailsButton.innerText = 'Details';
+    let detailsContainer;
+
+    detailsButton.addEventListener('click', function () {
+        if (!listItem.isDetailsShown) {
+            detailsContainer = document.createElement('div');
+            const lineSeparator = document.createElement('hr');
+            detailsContainer.prepend(lineSeparator);
+
+            const titleParagraphElement = document.createElement('p');
+            titleParagraphElement.innerText = `Title: ${listItem.title}`;
+            detailsContainer.appendChild(titleParagraphElement);
+
+            const descriptionParagraphElement = document.createElement('p');
+            descriptionParagraphElement.innerText = `Description: ${listItem.description}`;
+            detailsContainer.appendChild(descriptionParagraphElement);
+
+            const timeParagraphElement = document.createElement('p');
+            timeParagraphElement.innerText = `Time: ${formatHours(listItem.time)}`;
+            detailsContainer.appendChild(timeParagraphElement);
+
+            document.body.appendChild(detailsContainer);
+
+        } else {
+            detailsContainer.remove();
+        }
+
+        listItem.isDetailsShown = !listItem.isDetailsShown;
+    });
+
+    listItemElement.appendChild(detailsButton);
+
+    // STEP 8: Create 'Remove' button.
     const removeButton = document.createElement('button');
     removeButton.innerText = 'Remove';
     removeButton.addEventListener('click', function () {
@@ -122,8 +161,10 @@ function handleSaveButton() {
 
     listItemElement.appendChild(removeButton);
 
-    // STEP 8: Add list item to list.
+    // STEP 9: Add list item to list.
     listElement.appendChild(listItemElement);
+
+
 };
 
 // Press Enter to Submit input.
