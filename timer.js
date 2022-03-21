@@ -44,6 +44,7 @@ function formatHours(totalSeconds) {
 }
 
 let listState = [];
+let detailsContainer;
 
 function handleSaveButton() {
     // Apply to State.
@@ -113,13 +114,23 @@ function handleSaveButton() {
     });
 
     // STEP 7: Create a 'Details' button.
+
     const detailsButton = document.createElement('button');
     detailsButton.innerText = 'Details';
-    let detailsContainer;
 
     detailsButton.addEventListener('click', function () {
+        // STEP 1: Handle already shown item.
+        const shownItem = listState.find(listItem => listItem.isDetailsShown);
+
+        if (shownItem !== undefined && shownItem !== listItem) {
+            detailsContainer.remove();
+            shownItem.isDetailsShown = false;
+        }
+
+        // STEP 2: Handle currently clicked item.
         if (!listItem.isDetailsShown) {
             detailsContainer = document.createElement('div');
+
             const lineSeparator = document.createElement('hr');
             detailsContainer.prepend(lineSeparator);
 
