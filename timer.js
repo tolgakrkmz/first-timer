@@ -47,7 +47,7 @@ let listState = [];
 let detailsContainer;
 
 function handleSaveButton() {
-    // Apply to State.
+    // STEP 1: Apply to State.
     let listItem = {
         title: titleInputElement.value,
         time: seconds,
@@ -57,10 +57,14 @@ function handleSaveButton() {
 
     listState.push(listItem);
 
-    // STEP 1: Create list item.
+    // STEP 2: Resetting value of input elements.
+    descriptionField.value = '';
+    titleInputElement.value = '';
+
+    // STEP 3: Create list item.
     const listItemElement = document.createElement('li');
 
-    // STEP 2: Create list item title.
+    // STEP 4: Create list item title.
     const titleSpanElement = document.createElement('span');
     const separatorSpanElement = document.createElement('span');
 
@@ -70,19 +74,16 @@ function handleSaveButton() {
 
     if (listItem.title.length > 0) {
         separatorSpanElement.innerText = ' - ';
-        titleInputElement.value = '';
     }
 
-    descriptionField.value = '';
-
-    // STEP 3: Create list item time.
+    // STEP 5: Create list item time.
     listItemElement.appendChild(document.createTextNode(formatHours(seconds)))
 
-    // STEP 4: Create 'Input' field for title.
+    // STEP 6: Create 'Input' field for title.
     const textInputBox = document.createElement('input');
     textInputBox.setAttribute('type', 'text');
 
-    // STEP 5: Create 'Edit' button.
+    // STEP 7: Create 'Edit' button.
     const titleEditButton = document.createElement('button');
     titleEditButton.innerText = 'Edit';
     titleEditButton.addEventListener('click', function () {
@@ -98,23 +99,22 @@ function handleSaveButton() {
 
     listItemElement.appendChild(titleEditButton);
 
-    // STEP 6: Create 'Save' button in Edit state.
+    // STEP 8: Create 'Save' button in Edit state.
     const titleSaveButton = document.createElement('button');
     titleSaveButton.innerText = 'Save';
     titleSaveButton.addEventListener('click', function () {
         listItem.title = textInputBox.value;
         titleSpanElement.innerText = listItem.title;
-        textInputBox.replaceWith(titleSpanElement);
 
         if (listItem.title === 0) {
             separatorSpanElement.innerText = '';
         }
 
+        textInputBox.replaceWith(titleSpanElement);
         titleSaveButton.replaceWith(titleEditButton);
     });
 
-    // STEP 7: Create a 'Details' button.
-
+    // STEP 9: Create a 'Details' button.
     const detailsButton = document.createElement('button');
     detailsButton.innerText = 'Details';
 
@@ -132,7 +132,7 @@ function handleSaveButton() {
             detailsContainer = document.createElement('div');
 
             const lineSeparator = document.createElement('hr');
-            detailsContainer.prepend(lineSeparator);
+            detailsContainer.appendChild(lineSeparator);
 
             const titleParagraphElement = document.createElement('p');
             titleParagraphElement.innerText = `Title: ${listItem.title}`;
@@ -157,7 +157,7 @@ function handleSaveButton() {
 
     listItemElement.appendChild(detailsButton);
 
-    // STEP 8: Create 'Remove' button.
+    // STEP 10: Create 'Remove' button.
     const removeButton = document.createElement('button');
     removeButton.innerText = 'Remove';
     removeButton.addEventListener('click', function () {
@@ -172,10 +172,8 @@ function handleSaveButton() {
 
     listItemElement.appendChild(removeButton);
 
-    // STEP 9: Add list item to list.
+    // STEP 11: Add list item to list.
     listElement.appendChild(listItemElement);
-
-
 };
 
 // Press Enter to Submit input.
@@ -183,6 +181,14 @@ titleInputElement.addEventListener('keyup', function (event) {
     event.preventDefault();
 
     if (event.code === 'Enter') {
-        handleSaveButton()
+        handleSaveButton();
+    }
+});
+
+descriptionField.addEventListener('keyup', function (event) {
+    event.preventDefault();
+
+    if (event.code === 'Enter') {
+        handleSaveButton();
     }
 });
