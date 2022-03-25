@@ -104,6 +104,8 @@ function handleSaveButton() {
     titleSaveButton.innerText = 'Save';
     titleSaveButton.addEventListener('click', function () {
         listItem.title = textInputBox.value;
+        localStorage.setItem('list', JSON.stringify(listState));
+
         titleSpanElement.innerText = listItem.title;
 
         if (listItem.title === 0) {
@@ -165,6 +167,7 @@ function handleSaveButton() {
 
         if (idx > -1) {
             listState.splice(idx, 1);
+            localStorage.setItem('list', JSON.stringify(listState));
         }
 
         listItemElement.remove();
@@ -174,6 +177,8 @@ function handleSaveButton() {
 
     // STEP 11: Add list item to list.
     listElement.appendChild(listItemElement);
+
+    localStorage.setItem('list', JSON.stringify(listState));
 };
 
 // Press Enter to Submit input.
