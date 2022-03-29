@@ -179,6 +179,117 @@ function handleSaveButton() {
     listElement.appendChild(listItemElement);
 
     localStorage.setItem('list', JSON.stringify(listState));
+
+};
+
+const itemByLocal = JSON.parse(localStorage.getItem('list'));
+
+for (const i of itemByLocal) {
+    const listItemElementLocal = document.createElement('li');
+    const titleSpanElementLocal = document.createElement('span');
+    const separatorSpanElementLocal = document.createElement('span');
+
+    titleSpanElementLocal.appendChild(document.createTextNode(i.title));
+    listItemElementLocal.appendChild(titleSpanElementLocal);
+    listElement.appendChild(listItemElementLocal)
+    listItemElementLocal.appendChild(separatorSpanElementLocal);
+
+    if (i.title.length > 0) {
+        separatorSpanElementLocal.innerText = ' - ';
+    }
+
+    listItemElementLocal.appendChild(document.createTextNode(formatHours(i.time)));
+    // Create Input box.
+    const textInputBox = document.createElement('input');
+    textInputBox.setAttribute('type', 'text');
+
+    // Title Edit Button. 
+    const titleEditButtonLocal = document.createElement('button');
+    titleEditButtonLocal.innerText = 'Edit';
+    titleEditButtonLocal.addEventListener('click', function () {
+        textInputBox.value = i.title;
+        titleSpanElementLocal.replaceWith(textInputBox);
+
+        if (textInputBox.value.length === 0) {
+            separatorSpanElementLocal.innerText = ' - ';
+        }
+
+        titleEditButtonLocal.replaceWith(titleSaveButtonLocal);
+    });
+
+    listItemElementLocal.appendChild(titleEditButtonLocal);
+
+    // Create Save Button in Edit state.
+    const titleSaveButtonLocal = document.createElement('button');
+    titleSaveButtonLocal.innerText = 'Save';
+    titleSaveButtonLocal.addEventListener('click', function () {
+        i.title = textInputBox.value;
+        localStorage.setItem('list', JSON.stringify(listState));
+        
+        titleSpanElementLocal.innerText = i.title;
+
+        if (i.title === 0) {
+            separatorSpanElementLocal.innerText = '';
+        }
+
+        textInputBox.replaceWith(titleSpanElementLocal);
+        titleSaveButtonLocal.replaceWith(titleEditButtonLocal);
+    });
+
+    // Create a 'Details' button.
+    const detailsButtonLocal = document.createElement('button');
+    detailsButtonLocal.innerText = 'Details';
+
+    detailsButtonLocal.addEventListener('click', function () {
+        // STEP 1: Handle already shown item.
+        const shownItem = itemByLocal.find(itemByLocal => itemByLocal.isDetailsShown);
+
+        if (shownItem !== undefined && shownItem !== itemByLocal) {
+            detailsContainer.remove();
+            shownItem.isDetailsShown = false;
+        }
+
+        // STEP 2: Handle currently clicked item.
+        if (!itemByLocal.isDetailsShown) {
+            detailsContainer = document.createElement('div');
+
+            const lineSeparator = document.createElement('hr');
+            detailsContainer.appendChild(lineSeparator);
+
+            const titleParagraphElement = document.createElement('p');
+            titleParagraphElement.innerText = `Title: ${i.title}`;
+            detailsContainer.appendChild(titleParagraphElement);
+
+            const descriptionParagraphElement = document.createElement('p');
+            descriptionParagraphElement.innerText = `Description: ${i.description}`;
+            detailsContainer.appendChild(descriptionParagraphElement);
+
+            const timeParagraphElement = document.createElement('p');
+            timeParagraphElement.innerText = `Time: ${formatHours(i.time)}`;
+            detailsContainer.appendChild(timeParagraphElement);
+
+            document.body.appendChild(detailsContainer);
+
+        } else {
+            detailsContainer.remove();
+        }
+
+        itemByLocal.isDetailsShown = !itemByLocal.isDetailsShown;
+    });
+
+    listItemElementLocal.appendChild(detailsButtonLocal);
+
+    // STEP 10: Create 'Remove' button.
+    const removeButton = document.createElement('button');
+    removeButton.innerText = 'Remove';
+    removeButton.addEventListener('click', function () {
+        localStorage.setItem('list', JSON.stringify(listState));
+
+        listItemElementLocal.remove();
+    });
+
+    listItemElementLocal.appendChild(removeButton);
+
 };
 
 // Press Enter to Submit input.
@@ -196,4 +307,4 @@ descriptionField.addEventListener('keyup', function (event) {
     if (event.code === 'Enter') {
         handleSaveButton();
     }
-});
+}); 
